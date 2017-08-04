@@ -1,7 +1,5 @@
-quant_n <- 10 # 10 for decile, 4 for quartile, et cetera.
-
 # Function for computing mean within each part of the n-tile
-quantile_ave <- function(x, y = quant_n){
+quantile_ave <- function(x, n = 10){
     z <- 1 / y
     q = quantile(x, seq(0, 1, by = z))
     cuts = cut(x, q)
