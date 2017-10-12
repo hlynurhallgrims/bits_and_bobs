@@ -1,6 +1,6 @@
 # Function for computing mean within each part of the n-tile
 quantile_ave <- function(x, n = 10){
-    z <- 1 / y
+    z <- 1 / n
     q = quantile(x, seq(0, 1, by = z))
     cuts = cut(x, q)
     values_per_quantile = split(x, cuts)
