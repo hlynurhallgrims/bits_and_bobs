@@ -40,5 +40,9 @@ spot_done %>%
 
 spot_done %>% 
   ggplot(mapping = aes(x = minutur)) +
-  geom_histogram() +
-  scale_x_continuous(labels = point)
+  geom_histogram(breaks = seq(0, 100000, by = 5000), color = "white") +
+  scale_x_continuous(labels = point, limits = c(0, 100000), name = "Mínútur af Spotify hlustun á árinu") +
+  ylab("Fjöldi tísta í hverju 5.000 mínútna bili") +
+  ggtitle(label = "Í hve margar mínútur hlustu Spotify notendur á tónlist á árinu 2017?", subtitle = "Uppgefin hlustun í mínútum fyrir tíst merkt '#2017wrapped'") +
+  theme_minimal()
+  
