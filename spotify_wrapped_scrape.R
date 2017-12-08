@@ -9,7 +9,7 @@ point <- format_format(big.mark = ".", decimal.mark. = ",", scientific = FALSE)
 # Read --------------------------------------------------------------------
 
 spotify_tweets <- search_tweets(
-  "#2017wrapped", n = 100000, include_rts = FALSE
+  "#2017wrapped", n = 20000, include_rts = FALSE
 )
 
 # Wrangle -----------------------------------------------------------------
