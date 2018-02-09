@@ -26,30 +26,31 @@ valmynd <- function(data, x) {
 valmynd(df, actual_cost)
 
 # Test 2
-by_projection <- function(data, x, increase) {
+project_by <- function(data, x, by) {
   
   col_upon <- enquo(x)
-  col_from <- enquo(increase)
+  col_from <- enquo(by)
   
   new_df <- select(data, !!col_from, !!col_upon)
   old_names <- names(new_df)
   names(new_df) <- c("col_from", "col_upon")
-  replacement <- vector(length = nrow(new_df))
+  replacement <- vector(length = nrow(data))
   
   for (i in 2:nrow(new_df)) {
-    if (!(is.na(new_df$col_upon[i-1]))) {
-      replacement[[i]] <- new_df$col_upon[i-1] * (1 + new_df$col_from[i])
+    if (!(is.na(new_df$col_upon[i - 1]))) {
+      replacement[[i]] <- new_df$col_upon[i - 1] * (1 + new_df$col_from[i])
     } else {
-      replacement[[i]] <- replacement[[i-1]] * (1 + new_df$col_from[i])
+      replacement[[i]] <- replacement[[i - 1]] * (1 + new_df$col_from[i])
     }
   }
   new_df <- new_df %>% 
-    mutate(col_upon = coalesce(col_upon, replacement))
+    mutate(col_upon = as.numeric(col_upon),
+           col_upon = coalesce(col_upon, replacement))
   names(new_df) <- old_names
-  df <- df[setdiff(names(df), names(new_df))]
-  new_df <- bind_cols(df, new_df)
+  data <- data[setdiff(names(data), names(new_df))]
+  new_df <- bind_cols(data, new_df)
   new_df
 }
 
 df %>% 
-by_projection(actual_cost, proj_ann_growth)
+  project_by(actual_cost, proj_ann_growth)
