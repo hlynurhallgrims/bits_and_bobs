@@ -2,7 +2,7 @@ library(tidyverse)
 library(rlang)
 
 df <- tribble(
-  ~year,  ~proj_ann_growth, ~actual_cost,
+  ~year,  ~proj_ann_growth, ~cost,
   2014,  0.110,          200, 
   2015,  0.111,          221, 
   2016,  0.079,          244, 
@@ -17,40 +17,27 @@ df <- tribble(
   2025,  0.121,          NA)
 
 
-# Test 1
-valmynd <- function(data, x) {
-  x <- enquo(x)
-  select(data, !!x)[[1]]
-}
-
-valmynd(df, actual_cost)
-
 # Test 2
 project_by <- function(data, x, by) {
-  
   col_upon <- enquo(x)
   col_from <- enquo(by)
-  
-  new_df <- select(data, !!col_from, !!col_upon)
-  old_names <- names(new_df)
-  names(new_df) <- c("col_from", "col_upon")
+
   replacement <- vector(length = nrow(data))
   
-  for (i in 2:nrow(new_df)) {
-    if (!(is.na(new_df$col_upon[i - 1]))) {
-      replacement[[i]] <- new_df$col_upon[i - 1] * (1 + new_df$col_from[i])
+  for (i in 2:nrow(data)) {
+    if (!(is.na(eval_tidy(col_upon, data)[i - 1]))) {
+      replacement[[i]] <- eval_tidy(col_upon, data)[i - 1] * (1 + eval_tidy(col_from, data)[i])
     } else {
-      replacement[[i]] <- replacement[[i - 1]] * (1 + new_df$col_from[i])
+      replacement[[i]] <- replacement[[i - 1]] * (1 + eval_tidy(col_from, data)[i])
     }
   }
-  new_df <- new_df %>% 
-    mutate(col_upon = as.numeric(col_upon),
-           col_upon = coalesce(col_upon, replacement))
-  names(new_df) <- old_names
-  data <- data[setdiff(names(data), names(new_df))]
-  new_df <- bind_cols(data, new_df)
-  new_df
+  nafn <- sym(paste0("proj_", quo_text(col_upon)))
+  data <- data %>% 
+    mutate(!! nafn := as.numeric(!!col_upon),
+           !! nafn := coalesce(!!col_upon, replacement))
+
+  data
 }
 
 df %>% 
-  project_by(actual_cost, proj_ann_growth)
+  project_by(cost, proj_ann_growth)
