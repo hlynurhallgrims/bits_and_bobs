@@ -1,7 +1,6 @@
 #This is a tidyverse approach to a 'read and write many' scenario posted by Mike Spencer on his website:
 # https://scottishsnow.wordpress.com/2018/02/18/dplyr-lapply-for-loop/
 
-
 library(tidyverse)
 library(glue)
 library(here)
