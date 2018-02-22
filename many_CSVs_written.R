@@ -1,10 +1,9 @@
 library(tidyverse)
 library(here)
 
-df_list <- map(.x = f, .f = ~read_csv(here::here("temp", "raw", .x)))
-names(df_list) <- f
+f <- list.files("./temp/raw", pattern="file")
 
-df_list %>% 
+map(.x = f, .f = ~read_csv(here::here("temp", "raw", .x))) %>% 
   map(~select(., date, a, b, c)) %>%
   map(~gather(., variable, value, -date)) %>%
-  walk2(.y = names(.), ~write_csv(x = .x, path = here::here("temp", "clean", .y)))
+  walk2(.y = f, ~write_csv(x = .x, path = here::here("temp", "clean", .y)))
