@@ -25,7 +25,7 @@ timespan %>%
               c2 = rexp(length(.$date), 5))) %>%
   walk2(.y = timespan, ~write_csv(x = .x, path = glue("temp/raw/file_{.y}.csv")))
 
-all_files <- list.files("./temp/raw", pattern = "file")
+all_files <- list.files(here::here("temp", "raw"), pattern = "file")
 
 #The data is then manipulated to long format, then written to multiple .CSVs
 df_list <- map(.x = all_files, .f = ~read_csv(here::here("temp", "raw", .x)))
