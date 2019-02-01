@@ -1,6 +1,6 @@
 #
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
+# This is a (toy example) Shiny web app. You can run the application by visiting:
+#    https://hlynur.shinyapps.io/tidyeval_grouping/
 #
 # Find out more about building applications with Shiny here:
 #
@@ -21,7 +21,7 @@ ui <- fluidPage(
     sidebarPanel(
       selectInput(inputId = "vars_to_group_by", 
                   label = "Choose grouping variable", 
-                  choices = names(mtcars),
+                  choices = names(mtcars[c(2, 8:11)]),
                   multiple = TRUE),
       
       actionButton("Calculate", "Calculate")
@@ -45,7 +45,7 @@ server <- function(input, output) {
     
     mtcars %>% 
       group_by(!!!use_vars) %>% 
-      summarize(`Average MPG` = mean(mpg))
+      summarize(`Average MPG` = round(mean(mpg), 1))
   })
   
   
