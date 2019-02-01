@@ -1,6 +1,6 @@
 #
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
+# This is a (toy example) Shiny web app. You can run the application by visiting:
+#    https://hlynur.shinyapps.io/tidyeval_grouping/
 #
 # Find out more about building applications with Shiny here:
 #
