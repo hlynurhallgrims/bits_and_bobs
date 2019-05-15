@@ -1,0 +1,23 @@
+---
+title: "purrr::set_names() example"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+# Use set_names() to rename list objects based on the contents of the tibbles within the list
+
+```{r}
+library(tidyverse)
+library(glue)
+
+mtcars %>% 
+    group_split(gear, carb) %>% 
+    set_names(x = ., 
+              nm = map(.x = .,
+                          .f =~glue("gear_{first(.x$gear)}_carb_{first(.x$carb)}")
+                       )
+              )
+
+```
+
